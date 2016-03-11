@@ -22,12 +22,12 @@
 <booleanAttribute key="org.eclipse.cdt.launch.DEBUGGER_STOP_AT_MAIN" value="false"/>
 <stringAttribute key="org.eclipse.cdt.launch.DEBUGGER_STOP_AT_MAIN_SYMBOL" value="main"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROGRAM_ARGUMENTS" value="-dimx 20 -dimy 20 -seed 42 -platform dc -mapping ZigZag -scheduling fcfs -app ${project_loc}/apps/DEMO_CAR/DemoCar-PowerUp.amxmi -outputFolder ${project_loc}/OUTPUT_FILES -np"/>
-<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="Debug/ca-simulator"/>
-<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="ca-simulator"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="Debug/ca-noc-simulator"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="ca-noc-simulator"/>
 <booleanAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_AUTO_ATTR" value="false"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value="cdt.managedbuild.config.gnu.exe.debug.1134518697"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/ca-simulator"/>
+<listEntry value="/ca-noc-simulator"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>
