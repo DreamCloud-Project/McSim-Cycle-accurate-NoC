@@ -9,7 +9,7 @@
 #define DC_PARAMETERS_H_
 
 #include <map>
-#include "mapping_heuristic/dcMappingHeuristicI.hxx"
+#include "commons/mapping_heuristic/dcMappingHeuristicI.hxx"
 
 typedef map<string, dreamcloud::platform_sclib::dcMappingHeuristicI::dcMappingLocation> DCLabelsMapping;
 

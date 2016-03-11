@@ -18,10 +18,10 @@
 #define DC_PLATFORM_H_
 
 #include <vector>
-#include "parser/AmApplication.h"
-#include "parser/dcTaskGraph.h"
-#include "parser/dcApplication.h"
-#include "mapping_heuristic/dcMappingHeuristicI.hxx"
+#include "commons/parser/AmApplication.h"
+#include "commons/parser/dcTaskGraph.h"
+#include "commons/parser/dcApplication.h"
+#include "commons/mapping_heuristic/dcMappingHeuristicI.hxx"
 #include "../../common_functions.h"
 #include "../../tile.h"
 

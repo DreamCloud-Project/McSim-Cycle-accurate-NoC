@@ -6,7 +6,7 @@
 #include <systemc.h>
 #include <vector>
 #include "../virtual_proc.h"
-#include "parser/dcRunnableInstance.h"
+#include "commons/parser/dcRunnableInstance.h"
 #include "dc_proc_type.hxx"
 
 using namespace std;

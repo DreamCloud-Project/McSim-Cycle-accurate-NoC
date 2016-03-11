@@ -2,8 +2,8 @@
 #include <random>
 #include "dc_proc.h"
 #include "dc_parameters.h"
-#include "parser/dcExecutionCyclesConstantInstruction.h"
-#include "parser/dcExecutionCyclesDeviationInstruction.h"
+#include "commons/parser/dcExecutionCyclesConstantInstruction.h"
+#include "commons/parser/dcExecutionCyclesDeviationInstruction.h"
 #include "../proc_functions.h"
 
 // Number of bytes in a packet (considering a given flit size in bits,

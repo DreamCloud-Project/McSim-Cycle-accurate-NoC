@@ -1,17 +1,17 @@
 #include <ctime>
 #include "dc_platform.h"
-#include "parser/dcAmaltheaParser.h"
+#include "commons/parser/dcAmaltheaParser.h"
 #include "dc_parameters.h"
-#include "mapping_heuristic/dcMappingHeuristicKhalidDC.hxx"
-#include "mapping_heuristic/dcMappingHeuristicMinComm.hxx"
-#include "mapping_heuristic/dcMappingHeuristicStatic.hxx"
-#include "mapping_heuristic/dcMappingHeuristicWeka.hxx"
-#include "mapping_heuristic/dcMappingHeuristicStaticSM.hxx"
-#include "mapping_heuristic/dcMappingHeuristicZigZag.hxx"
-#include "mapping_heuristic/dcMappingHeuristicZigZagSM.hxx"
-#include "mapping_heuristic/dcMappingHeuristicZigZagThreeCore.hxx"
-#include "mapping_heuristic/dcMappingHeuristicRandom.hxx"
-#include "mapping_heuristic/uoyHeuristicModuleStatic.hxx"
+#include "commons/mapping_heuristic/dcMappingHeuristicKhalidDC.hxx"
+#include "commons/mapping_heuristic/dcMappingHeuristicMinComm.hxx"
+#include "commons/mapping_heuristic/dcMappingHeuristicStatic.hxx"
+#include "commons/mapping_heuristic/dcMappingHeuristicWeka.hxx"
+#include "commons/mapping_heuristic/dcMappingHeuristicStaticSM.hxx"
+#include "commons/mapping_heuristic/dcMappingHeuristicZigZag.hxx"
+#include "commons/mapping_heuristic/dcMappingHeuristicZigZagSM.hxx"
+#include "commons/mapping_heuristic/dcMappingHeuristicZigZagThreeCore.hxx"
+#include "commons/mapping_heuristic/dcMappingHeuristicRandom.hxx"
+#include "commons/mapping_heuristic/uoyHeuristicModuleStatic.hxx"
 
 DCLabelsMapping DCParameters::labelsMap;
 
