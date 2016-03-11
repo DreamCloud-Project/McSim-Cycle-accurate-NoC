@@ -4,8 +4,8 @@ cmake_minimum_required(VERSION 2.8)
 SET(CMAKE_CXX_FLAGS "-std=c++11")
 set(CMAKE_BUILD_TYPE Release)
 
-file(GLOB_RECURSE simu_SOURCES FOLLOW_SYMLINKS "src/*.cpp" "src/*.cxx")
-file(GLOB_RECURSE simu_HEADERS FOLLOW_SYMLINKS "src/*.h")
+file(GLOB_RECURSE simu_SOURCES FOLLOW_SYMLINKS "src/platform/*.cpp" "src/platform/*.cxx")
+file(GLOB_RECURSE simu_HEADERS FOLLOW_SYMLINKS "src/platform/*.h" "src/platform/*.hxx")
 
 set (simu_INCLUDE_DIRS "")
 foreach (_headerFile ${simu_HEADERS})

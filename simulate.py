@@ -24,10 +24,9 @@ FREQ_UNITS = {
 
 APP_NAMES_TO_FILES = {
  'DC'  : '/apps/DEMO_CAR/DemoCar-PowerUp.amxmi',
- 'CSE' : '/apps/CONTROL_SYSTEM_ENGINE.amxmi',
 }
 
-MAPPINGS = ['MinComm', 'Static', 'StaticSM', 'ZigZag', 'ZigZagSM', '3Core', 'Random', 'StaticModes']
+MAPPINGS = ['MinComm', 'Static', 'ZigZag', 'Random']
 
 class ValidateMapping(argparse.Action):
     def __call__(self, parser, args, values, option_string=None):
@@ -75,7 +74,7 @@ def main():
     parser = argparse.ArgumentParser(description='Cycle accurate simulator runner script')
     parser.add_argument('-d', '--syntax_dependency', action='store_true', help='consider successive runnables in tasks call graph as dependent')
     appGroup = parser.add_mutually_exclusive_group()
-    appGroup.add_argument('-da', '--def_application', help='specify the application to be simulated among the default ones', choices=['DC','CSE'])
+    appGroup.add_argument('-da', '--def_application', help='specify the application to be simulated among the default ones', choices=['DC'])
     appGroup.add_argument('-ca', '--custom_application', help='specify a custom application file to be simulated')
     parser.add_argument('-f', '--freq', help='specify the frequency of cores in the NoC. Supported frequency units are Hz, KHz, MHz and GHz e.g 400MHz or 1GHz', action=ValidateFreq)
     appGroup.add_argument('-mf', '--modes_file', help='specify a modes switching file to be simulated')
@@ -106,6 +105,8 @@ def main():
     out = os.path.dirname(os.path.realpath(__file__)) + DEFAULT_OUTPUT_FOLDER
     if args.output_folder:
         out = args.output_folder
+    if not os.path.exists(out):
+        os.makedirs(out)
     sched = DEFAULT_SCHEDULING_STRATEGY
     if args.scheduling_strategy:
         sched = args.scheduling_strategy
@@ -159,8 +160,12 @@ def main():
          outFile.close()
     else:
         print (cmdStr)
-        sim = subprocess.Popen(cmd, env=my_env)
-        sim.wait()
+        sim = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=my_env)
+        stdout, stderr = sim.communicate()
+        outFile = open(out + '/' + 'OUTPUT_Execution_Report.log', 'w')
+        outFile.write(stdout)
+        outFile.close()
+        print stdout
     if sim.returncode != 0:
         if not args.verbose:
             print stderr,
@@ -168,7 +173,7 @@ def main():
         exit(-1)
 
     # Run the energy estimator module
-    cmd = [os.path.dirname(os.path.realpath(__file__)) + '/src/Energy_Estimator/Power_Multiproc.py', out]
+    cmd = [os.path.dirname(os.path.realpath(__file__)) + '/src/energy_estimator/Power_Multiproc.py', out]
     nrj = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = nrj.communicate()
     if nrj.wait() != 0:

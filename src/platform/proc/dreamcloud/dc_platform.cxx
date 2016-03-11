@@ -366,8 +366,6 @@ void DcPlatform::dependentRunnablesReleaser_method() {
 			}
 		}
 	}
-	cout << nbRunnablesCompleted << " completed and "
-				<< nbRunnablesMapped << " mapped at time " << sc_time_stamp() << endl;
 
 	// When we don't handle periodics stop the simulation when all
 	// the runnables (periodic and non periodic) have been executed once
