@@ -24,7 +24,17 @@ The requirements for using these scripts are the following ones:
 Compilation is done through the compile.py script which documentation is the following:  
 
 ```
-TODO
+>> ./compile.py --help
+usage: compile.py [-h] [-v] {build,clean} ...
+
+Cycle Accurate Simulator Compiler script
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --verbose  enable verbose output
+
+valid subcommands:
+  {build,clean}
 ```
 
 ### Running the simulator
@@ -36,7 +46,47 @@ scheduling and without repeating periodic runnables.  You can play
 with all these parameters which documentation is the following:
 
 ```
-TODO
+>>./simulate.py --help
+usage: simulate.py [-h] [-d] [-da {DC}] [-ca CUSTOM_APPLICATION] [-f FREQ]
+                   [-mf MODES_FILE]
+                   [-m MAPPING_STRATEGY [MAPPING_STRATEGY ...]] [-np]
+                   [-o OUTPUT_FOLDER] [-r] [-s {prio}] [-v] [-x ROWS]
+                   [-y COLS]
+
+Cycle accurate simulator runner script
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d, --syntax_dependency
+                        consider successive runnables in tasks call graph as
+                        dependent
+  -da {DC}, --def_application {DC}
+                        specify the application to be simulated among the
+                        default ones
+  -ca CUSTOM_APPLICATION, --custom_application CUSTOM_APPLICATION
+                        specify a custom application file to be simulated
+  -f FREQ, --freq FREQ  specify the frequency of cores in the NoC. Supported
+                        frequency units are Hz, KHz, MHz and GHz e.g 400MHz or
+                        1GHz
+  -mf MODES_FILE, --modes_file MODES_FILE
+                        specify a modes switching file to be simulated
+  -m MAPPING_STRATEGY [MAPPING_STRATEGY ...], --mapping_strategy MAPPING_STRATEGY [MAPPING_STRATEGY ...]
+                        specify the mapping strategy used to map runnables on
+                        cores and labels on memories. Valide strategies are
+                        ['MinComm', 'Static', 'ZigZag', 'Random']
+  -np, --no_periodicity
+                        run periodic runnables only once
+  -o OUTPUT_FOLDER, --output_folder OUTPUT_FOLDER
+                        specify the absolute path of the output folder where
+                        simulation results will be generated
+  -r, --random          replace constant seed used to generate distributions
+                        by a random one based on current time
+  -s {prio}, --scheduling_strategy {prio}
+                        specify the scheduling strategy used by cores to
+                        choose the runnable to execute
+  -v, --verbose         enable verbose output
+  -x ROWS, --rows ROWS  specify the number of rows in the NoC
+  -y COLS, --cols COLS  specify the number of columns in the NoC
 ```
 
 ## Licence
