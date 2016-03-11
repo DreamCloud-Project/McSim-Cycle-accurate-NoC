@@ -3,6 +3,8 @@
 This repository contains a simulator able to simulate embedded applications described using
 the [AMALTHEA](http://www.amalthea-project.org/) application model on top of NoC-based architectures in a cycle accurate way.
 
+To get the simulator you must clone this repository and its submodules. To clone the repository if you have an GitHub account with an SSH key registered use `git clone git@github.com:DreamCloud-Project/McSim-Cycle-accurate-NoC.git`. Else use `git clone https://github.com/DreamCloud-Project/McSim-Cycle-accurate-NoC.git`. Then use `git submodule init` followed by `git submodule update` to clone submodules.
+
 ## Using the simulator
 
 To ease the usage of the simulator, two python scripts are provided:  
