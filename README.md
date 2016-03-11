@@ -1,7 +1,7 @@
 # McSim - NoC-based platform cycle-accurate simulator
 
 This repository contains a simulator able to simulate embedded applications described using
-the [AMALTHEA](http://www.amalthea-project.org/) application model on top of NoC-based architectures in a cycle accurate way.
+the [AMALTHEA](http://www.amalthea-project.org/) application model on top of NoC-based architectures in a cycle accurate way. This simulator is based on [NoCTweak](https://sourceforge.net/projects/noctweak/).
 
 To get the simulator you must clone this repository and its submodules. To clone the repository if you have an GitHub account with an SSH key registered use `git clone git@github.com:DreamCloud-Project/McSim-Cycle-accurate-NoC.git`. Else use `git clone https://github.com/DreamCloud-Project/McSim-Cycle-accurate-NoC.git`. Then use `git submodule init` followed by `git submodule update` to clone submodules.
 
@@ -27,7 +27,7 @@ Compilation is done through the compile.py script which documentation is the fol
 >> ./compile.py --help
 usage: compile.py [-h] [-v] {build,clean} ...
 
-Cycle Accurate Simulator Compiler script
+Cycle accurate simulator compiler script
 
 optional arguments:
   -h, --help     show this help message and exit
