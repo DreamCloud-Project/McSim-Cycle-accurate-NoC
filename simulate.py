@@ -133,7 +133,7 @@ def main():
     my_env['SC_COPYRIGHT_MESSAGE'] = 'DISABLE'
 
     # Run the simulation
-    cmd = [os.path.dirname(os.path.realpath(__file__)) + '/obj/ca_simu', '-mapping', mapping,]
+    cmd = [os.path.dirname(os.path.realpath(__file__)) + '/obj/mcsim-ca-noc', '-mapping', mapping,]
     if mappingFile:
         cmd.append(mappingFile)
     if mappingSeed:
