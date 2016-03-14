@@ -1,4 +1,4 @@
-# McSim-Cycle-accurate-NoC : Manycore platform Simulation tool for NoC-based platform at a Cycle-accurate level
+# McSim-Cycle-accurate-NoC: Manycore platform Simulation tool for NoC-based platform at a Cycle-accurate level
 
 This repository contains a simulator able to simulate embedded applications described using
 the [AMALTHEA](http://www.amalthea-project.org/) application model on top of NoC-based architectures in a cycle accurate way. This simulator is based on [NoCTweak](https://sourceforge.net/projects/noctweak/).
