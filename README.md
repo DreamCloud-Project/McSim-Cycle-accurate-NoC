@@ -21,7 +21,7 @@ The requirements for using these scripts are the following ones:
 
 ### Compiling the simulator
 
-Compilation is done through the compile.py script which documentation is the following:  
+Compilation is done through the `compile.py` script which documentation is the following:  
 
 ```
 >> ./compile.py --help
@@ -39,7 +39,7 @@ valid subcommands:
 
 ### Running the simulator
 
-To run a particular simulation, just run the simulate.py script. By
+To run a particular simulation, just run the `simulate.py` script. By
 default this script runs one iteration of the Demo Car application on
 a 4x4 NoC using ZigZag mapping, First Come First Serve (fcfs)
 scheduling and without repeating periodic runnables.  You can play
