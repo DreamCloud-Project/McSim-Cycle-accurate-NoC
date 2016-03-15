@@ -1,7 +1,7 @@
 # McSim-Cycle-accurate-NoC: Manycore platform Simulation tool for NoC-based platform at a Cycle-accurate level
 
 This repository contains a simulator able to simulate embedded applications described using
-the [AMALTHEA](http://www.amalthea-project.org/) application model on top of NoC-based architectures in a cycle accurate way. This simulator is based on [NoCTweak](https://sourceforge.net/projects/noctweak/) and has been developed by the LIRMM laboratory of Montpellier.
+the [AMALTHEA](http://www.amalthea-project.org/) application model on top of NoC-based manycore architectures in a cycle accurate way. This simulator is based on [NoCTweak](https://sourceforge.net/projects/noctweak/) and has been developed by the LIRMM laboratory of Montpellier.
 
 To get the simulator you must clone this repository and its submodules. To clone the repository if you have a GitHub account with an SSH key registered use `git clone git@github.com:DreamCloud-Project/McSim-Cycle-accurate-NoC.git`. Else use `git clone https://github.com/DreamCloud-Project/McSim-Cycle-accurate-NoC.git`. Then use `git submodule init` followed by `git submodule update` to clone submodules.
 
