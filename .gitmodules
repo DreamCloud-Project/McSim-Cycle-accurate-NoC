@@ -1,3 +1,3 @@
 [submodule "src/platform/proc/dreamcloud/commons"]
 	path = src/platform/proc/dreamcloud/commons
-	url = git@github.com:DreamCloud-Project/McSim-commons.git
+	url = https://github.com/DreamCloud-Project/McSim-commons.git
