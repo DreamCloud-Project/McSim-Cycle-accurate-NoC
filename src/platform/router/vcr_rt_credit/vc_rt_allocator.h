@@ -14,6 +14,7 @@
 
 #include "../vcr_rt_credit/support_modules/vca_stage1_output_vc_chooser_rt.h"
 #include "support_modules/vca_stage2_output_vc_arbitrer_rt.h"
+#include "../../MemoryProfiled.h"
 
 using namespace std;
 
@@ -21,7 +22,15 @@ using namespace std;
  * 1 single VC allocator for all the input VC of the router.
  */
 template<int N_VCs>
-SC_MODULE (VCRTAllocator) {
+#ifdef MEM_PROF
+class VCRTAllocator: public sc_module, MemoryProfiled<VCRTAllocator<N_VCs> > {
+#else
+class VCRTAllocator: public sc_module {
+#endif
+
+public:
+//template<int N_VCs>
+//SC_MODULE (VCRTAllocator) {
 
 	sc_in<int> out_port_req_reg[N_ROUTER_PORTS * N_VCs];
 	sc_in<bool> tail_reg[N_ROUTER_PORTS * N_VCs];
@@ -54,12 +63,11 @@ SC_MODULE (VCRTAllocator) {
 	SC_CTOR (VCRTAllocator) {
 
 		// stage1: N_VCS * N_ROUTER_PORTS arbiters, each for an input VC
-		string arbiter_stage1_name;
+		string arbiter_stage1_name = "";
 		for (int portId = 0; portId < N_ROUTER_PORTS; portId++) {
 			for (int vcId = 0; vcId < N_VCs; vcId++) {
 				int indexId = portId * N_VCs + vcId;
-				arbiter_stage1_name = "VCA_Arbiter_Stage1["
-						+ int_to_str(indexId) + "]";
+				//arbiter_stage1_name = "VCA_Arbiter_Stage1["+ int_to_str(indexId) + "]";
 				arbiter_stage1[indexId] = new VCAStage1OutputVCChooserRT<N_VCs>(
 						arbiter_stage1_name.data());
 				arbiter_stage1[indexId]->in_vc_index = indexId;
@@ -83,12 +91,11 @@ SC_MODULE (VCRTAllocator) {
 		}
 
 		// stage2: N_VCS * N_ROUTER_PORTS arbiters, each for an output VC
-		string arbiter_stage2_name;
+		string arbiter_stage2_name = "";
 		for (int portId = 0; portId < N_ROUTER_PORTS; portId++) {
 			for (int vcId = 0; vcId < N_VCs; vcId++) {
 				int indexo = portId * N_VCs + vcId;
-				arbiter_stage2_name = "VCA_Arbiter_Stage2[" + int_to_str(indexo)
-						+ "]";
+				//arbiter_stage2_name = "VCA_Arbiter_Stage2[" + int_to_str(indexo)+ "]";
 				arbiter_stage2[indexo] = new VCAStage2OutputVCArbitrerRT<N_VCs>(
 						arbiter_stage2_name.data(), portId, vcId);
 

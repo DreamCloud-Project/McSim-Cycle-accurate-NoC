@@ -23,6 +23,9 @@ struct DCParameters{
 	static string scheduling;
 	static unsigned int iterations;
 	static bool seqDep;
+	static bool useMicroworkload;
+	static unsigned int microworkloadWidth;
+	static unsigned int microworkloadHeight;
 	static bool generateWaveforms;
 	static bool dontHandlePeriodic;
 	static unsigned long int coresFrequencyInHz;

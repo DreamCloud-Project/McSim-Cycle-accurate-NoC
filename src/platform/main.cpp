@@ -129,6 +129,9 @@ string DCParameters::outputFolder = "";
 string DCParameters::scheduling = "";
 unsigned int DCParameters::iterations = 1;
 bool DCParameters::seqDep = false;
+bool DCParameters::useMicroworkload = false;
+unsigned int DCParameters::microworkloadWidth = 2;
+unsigned int DCParameters::microworkloadHeight = 2;
 bool DCParameters::generateWaveforms = false;
 bool DCParameters::dontHandlePeriodic = false;
 unsigned long int DCParameters::coresFrequencyInHz = 1E9;
@@ -921,6 +924,65 @@ int sc_main(int argc, char *argv[]) {
 			}
 		}
 	}
+
+#ifdef MEM_PROF
+	// Print memory profiling information
+	std::cout << "there are " << sc_object::instance_count << " sc_objects " << " in memory" << std::endl;
+	std::size_t total = 0;
+	MemoryProfiled<DcPlatform>::print(total);
+	MemoryProfiled<DcProc>::print(total);
+	switch (RouterParameter::n_VCs) {
+	case (1):
+		MemoryProfiled<VCRTRouter<1>>::print(total);
+		MemoryProfiled<VCRTCrossbar<1>>::print(total);
+		MemoryProfiled<VCRTAllocator<1>>::print(total);
+		MemoryProfiled<SWRTAllocator<1>>::print(total);
+		MemoryProfiled<OutVCStateUpdateRT<1>>::print(total);
+		MemoryProfiled<SAStage1RT<1>>::print(total);
+		MemoryProfiled<SAStage2RT<1>>::print(total);
+		MemoryProfiled<VCAStage1OutputVCChooserRT<1>>::print(total);
+		MemoryProfiled<VCAStage2OutputVCArbitrerRT<1>>::print(total);
+		break;
+	case (2):
+		MemoryProfiled<VCRTRouter<2>>::print(total);
+		MemoryProfiled<VCRTCrossbar<2>>::print(total);
+		MemoryProfiled<VCRTAllocator<2>>::print(total);
+		MemoryProfiled<SWRTAllocator<2>>::print(total);
+		MemoryProfiled<OutVCStateUpdateRT<2>>::print(total);
+		MemoryProfiled<SAStage1RT<2>>::print(total);
+		MemoryProfiled<SAStage2RT<2>>::print(total);
+		MemoryProfiled<VCAStage1OutputVCChooserRT<2>>::print(total);
+		MemoryProfiled<VCAStage2OutputVCArbitrerRT<2>>::print(total);
+		break;
+	case (4):
+		MemoryProfiled<VCRTRouter<4>>::print(total);
+		MemoryProfiled<VCRTCrossbar<4>>::print(total);
+		MemoryProfiled<VCRTAllocator<4>>::print(total);
+		MemoryProfiled<SWRTAllocator<4>>::print(total);
+		MemoryProfiled<OutVCStateUpdateRT<4>>::print(total);
+		MemoryProfiled<SAStage1RT<4>>::print(total);
+		MemoryProfiled<SAStage2RT<4>>::print(total);
+		MemoryProfiled<VCAStage1OutputVCChooserRT<4>>::print(total);
+	    MemoryProfiled<VCAStage2OutputVCArbitrerRT<4>>::print(total);
+		break;
+	case (8):
+		MemoryProfiled<VCRTRouter<8>>::print(total);
+		MemoryProfiled<VCRTCrossbar<8>>::print(total);
+		MemoryProfiled<VCRTAllocator<8>>::print(total);
+		MemoryProfiled<SWRTAllocator<8>>::print(total);
+		MemoryProfiled<OutVCStateUpdateRT<8>>::print(total);
+		MemoryProfiled<SAStage1RT<8>>::print(total);
+		MemoryProfiled<SAStage2RT<8>>::print(total);
+		MemoryProfiled<VCAStage1OutputVCChooserRT<8>>::print(total);
+		MemoryProfiled<VCAStage2OutputVCArbitrerRT<8>>::print(total);
+		break;
+	}
+	MemoryProfiled<VCRTBuffer>::print(total);
+	MemoryProfiled<VCValidInDemuxRT>::print(total);
+	MemoryProfiled<InVCStateUpdateRT>::print(total);
+	MemoryProfiled<RouteCompVcRT>::print(total);
+	std::cout << "Total memory is " << (total / 1000.0) << " Kb" << std::endl << std::endl;
+#endif
 
 	//################## Running Simulation
 	if (CommonParameter::platform_type != PLATFORM_DC) {

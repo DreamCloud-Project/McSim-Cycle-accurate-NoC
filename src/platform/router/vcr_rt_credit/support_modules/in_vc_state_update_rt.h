@@ -12,8 +12,15 @@
 
 #include "systemc.h"
 #include "../../router_parameters.h"
+#include "../../../MemoryProfiled.h"
 
-SC_MODULE (InVCStateUpdateRT){
+#ifdef MEM_PROF
+class InVCStateUpdateRT : public sc_module, MemoryProfiled<InVCStateUpdateRT> {
+#else
+class InVCStateUpdateRT : public sc_module {
+#endif
+
+public:
 	int in_port;	// input port identification
 	int in_vc;		// input VC of the input port above
 
@@ -53,7 +60,8 @@ SC_MODULE (InVCStateUpdateRT){
 			}
 	}
 
-	SC_CTOR (InVCStateUpdateRT){
+	SC_HAS_PROCESS(InVCStateUpdateRT);
+	InVCStateUpdateRT(sc_module_name name_) : sc_module(name_) {
 		SC_METHOD (in_vc_state_process);
 		sensitive << is_empty << is_tail_reg << out_vc_allocated << in_vc_state_reg;
 	}

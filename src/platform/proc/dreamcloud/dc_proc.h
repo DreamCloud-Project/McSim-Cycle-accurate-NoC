@@ -8,11 +8,16 @@
 #include "../virtual_proc.h"
 #include "commons/parser/dcRunnableInstance.h"
 #include "dc_proc_type.hxx"
+#include"../../MemoryProfiled.h"
 
 using namespace std;
 using namespace DCApplication;
 
+#ifdef MEM_PROF
+class DcProc: public VirtualProc, MemoryProfiled<DcProc> {
+#else
 class DcProc: public VirtualProc {
+#endif
 
 public:
 

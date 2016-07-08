@@ -29,7 +29,11 @@ using namespace std;
 using namespace DCApplication;
 using namespace dreamcloud::platform_sclib;
 
-class DcPlatform: sc_module {
+#ifdef MEM_PROF
+class DcPlatform: public sc_module, MemoryProfiled<DcPlatform> {
+#else
+class DcPlatform: public sc_module {
+#endif
 
 public:
 

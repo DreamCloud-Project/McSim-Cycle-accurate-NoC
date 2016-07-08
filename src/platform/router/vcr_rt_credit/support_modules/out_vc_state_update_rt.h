@@ -12,9 +12,20 @@
 
 #include "systemc.h"
 #include "../../router_parameters.h"
+#include "../../../MemoryProfiled.h"
 
-template <int N_VCs>
-SC_MODULE (OutVCStateUpdateRT){
+#ifdef MEM_PROF
+template<int N_VCs>
+class OutVCStateUpdateRT: public sc_module, MemoryProfiled<OutVCStateUpdateRT<N_VCs> > {
+#else
+template<int N_VCs>
+class OutVCStateUpdateRT: public sc_module {
+#endif
+
+public:
+
+//template <int N_VCs>
+//SC_MODULE (OutVCStateUpdateRT){
 	int out_port;
 	int out_vc;
 

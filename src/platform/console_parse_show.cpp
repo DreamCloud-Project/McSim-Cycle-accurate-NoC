@@ -380,6 +380,12 @@ void command_line_parser(int argc, char *argv[]) {
 				DCParameters::iterations = atoi(argv[++i]);
 			} else if (!option.compare("-d")) {
 				DCParameters::seqDep = true;
+			} else if (!option.compare("-mw")) {
+				DCParameters::useMicroworkload = true;
+			} else if (!option.compare("-mww")) {
+				DCParameters::microworkloadWidth = atoi(argv[++i]);
+			}  else if (!option.compare("-mwh")) {
+				DCParameters::microworkloadHeight = atoi(argv[++i]);
 			} else {
 				cerr << "ERROR: invalid command line inputs!\n"
 						<< "No option name \'" << option << "\'" << endl;

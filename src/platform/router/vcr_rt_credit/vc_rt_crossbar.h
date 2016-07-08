@@ -16,9 +16,18 @@
 
 #include "systemc.h"
 #include "../../definition.h"
+#include "../../MemoryProfiled.h"
 
-template <int N_VCs>
-SC_MODULE (VCRTCrossbar){
+template<int N_VCs>
+#ifdef MEM_PROF
+class VCRTCrossbar: public sc_module, MemoryProfiled<VCRTCrossbar<N_VCs> > {
+#else
+class VCRTCrossbar: public sc_module {
+#endif
+
+public:
+//template <int N_VCs>
+//SC_MODULE (VCRTCrossbar){
 //	sc_in <bool> reset;
 
 	sc_in <Flit> crossbar_in[ROUTER_PORTS];

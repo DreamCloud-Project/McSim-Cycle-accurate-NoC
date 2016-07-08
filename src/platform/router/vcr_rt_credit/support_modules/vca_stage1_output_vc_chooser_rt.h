@@ -13,13 +13,23 @@
 
 #include <systemc.h>
 #include "../../router_parameters.h"
+#include "../../../MemoryProfiled.h"
 
 /**
  * One VCAStage1 for each input VC.
  * So there is N_VCS * N_ROUTER_PORTS VCAStage 1.
  */
 template<int N_VCs>
-SC_MODULE (VCAStage1OutputVCChooserRT) {
+#ifdef MEM_PROF
+class VCAStage1OutputVCChooserRT: public sc_module, MemoryProfiled<VCAStage1OutputVCChooserRT<N_VCs> > {
+#else
+class VCAStage1OutputVCChooserRT: public sc_module {
+#endif
+
+public:
+
+//template<int N_VCs>
+//SC_MODULE (VCAStage1OutputVCChooserRT) {
 
 	int in_port_id; // the input port id
 	int in_vc_id; // the VC id in the input port

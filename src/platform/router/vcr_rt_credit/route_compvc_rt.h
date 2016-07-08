@@ -14,11 +14,19 @@
 #include "../router_parameters.h"
 #include "../routing_algorithms.h"
 #include "../../definition.h"
+#include "../../MemoryProfiled.h"
 
 /**
  * There is one routing component for each input VC.
  */
-SC_MODULE (RouteCompVcRT){
+#ifdef MEM_PROF
+class RouteCompVcRT: public sc_module, MemoryProfiled<RouteCompVcRT> {
+#else
+class RouteCompVcRT: public sc_module {
+#endif
+
+public:
+//SC_MODULE (RouteCompVcRT){
 
 	int local_x;
 	int local_y;

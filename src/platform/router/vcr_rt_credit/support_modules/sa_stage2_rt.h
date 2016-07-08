@@ -18,9 +18,20 @@
 
 #include <systemc.h>
 #include "../../router_parameters.h"
+#include "../../../MemoryProfiled.h"
 
+#ifdef MEM_PROF
 template<int N_VCs>
-SC_MODULE (SAStage2RT) {
+class SAStage2RT: public sc_module, MemoryProfiled<SAStage2RT<N_VCs> > {
+#else
+template<int N_VCs>
+class SAStage2RT: public sc_module {
+#endif
+
+public:
+
+//template<int N_VCs>
+//SC_MODULE (SAStage2RT) {
 	int out_port;
 
 	sc_in<int> sa_grant_stage1[N_ROUTER_PORTS];

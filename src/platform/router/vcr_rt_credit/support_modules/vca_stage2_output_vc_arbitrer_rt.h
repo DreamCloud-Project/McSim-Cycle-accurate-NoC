@@ -12,9 +12,19 @@
 
 #include <systemc.h>
 #include "../../router_parameters.h"
+#include "../../../MemoryProfiled.h"
 
 template<int N_VCs>
-SC_MODULE (VCAStage2OutputVCArbitrerRT) {
+#ifdef MEM_PROF
+class VCAStage2OutputVCArbitrerRT: public sc_module, MemoryProfiled<VCAStage2OutputVCArbitrerRT<N_VCs> > {
+#else
+class VCAStage2OutputVCArbitrerRT: public sc_module {
+#endif
+
+public:
+
+//template<int N_VCs>
+//SC_MODULE (VCAStage2OutputVCArbitrerRT) {
 	int out_vc_index;	// the global index of considered output vc
 
 	sc_in<int> vca_grant_stage1[N_ROUTER_PORTS * N_VCs];

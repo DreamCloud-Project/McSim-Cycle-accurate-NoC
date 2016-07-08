@@ -17,10 +17,6 @@ void RouteCompVcRT::route_computation_process() {
 		if (!buffer_empty.read() && flit_tmp.head) { // only allow to compute if flit is head
 			int route = output_port_cal(flit_tmp,
 					RouterParameter::routing_type);
-//			cerr << "routing " << flit_tmp << " from IVC " << vcId
-//					<< " of port " << int2direction(portId) << " of router "
-//					<< local_x << local_y << " to " << int2direction(route)
-//					<< endl;
 			out_port.write(route);
 		}
 	}

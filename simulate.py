@@ -79,6 +79,9 @@ def main():
     parser.add_argument('-f', '--freq', help='specify the frequency of cores in the NoC. Supported frequency units are Hz, KHz, MHz and GHz e.g 400MHz or 1GHz', action=ValidateFreq)
     appGroup.add_argument('-mf', '--modes_file', help='specify a modes switching file to be simulated')
     parser.add_argument('-m', '--mapping_strategy', help='specify the mapping strategy used to map runnables on cores and labels on memories. Valide strategies are ' + str(MAPPINGS), nargs="+",  action=ValidateMapping)
+    parser.add_argument('-mw', '--micro_workload', action='store_true', help='simulate a micro workload of the application instead of the real application')
+    parser.add_argument('-mww', '--micro_workload_width', type=int, help='the width of the simulated micro workload. To be used with -mw only')
+    parser.add_argument('-mwh', '--micro_workload_height', type=int, help='the height of the simulated micro workload. To be used with -mw only')
     parser.add_argument('-np', '--no_periodicity', action='store_true', help='run periodic runnables only once')
     parser.add_argument('-o', '--output_folder', help='specify the absolute path of the output folder where simulation results will be generated')
     parser.add_argument('-r', '--random', action='store_true', help='replace constant seed used to generate distributions by a random one based on current time')
@@ -147,6 +150,14 @@ def main():
          cmd.append('-d')
     if args.no_periodicity:
          cmd.append('-np')
+    if args.micro_workload:
+         cmd.append('-mw')
+         if args.micro_workload_width:
+             cmd.append('-mww')
+             cmd.append(str(args.micro_workload_width))
+         if args.micro_workload_height:
+             cmd.append('-mwh')
+             cmd.append(str(args.micro_workload_height))
     if not args.random:
          cmd.extend(('-seed', "42"))
     cmdStr = ''

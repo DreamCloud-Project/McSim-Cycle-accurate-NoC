@@ -12,8 +12,16 @@
 
 #include <systemc.h>
 #include "../../router_parameters.h"
+#include "../../../MemoryProfiled.h"
 
-SC_MODULE (VCValidInDemuxRT){
+#ifdef MEM_PROF
+class VCValidInDemuxRT : public sc_module, MemoryProfiled<VCValidInDemuxRT> {
+#else
+class VCValidInDemuxRT : public sc_module {
+#endif
+
+public:
+//SC_MODULE (VCValidInDemuxRT){
 	int vc_id;	// vc_id of the input port
 
 	sc_in <Flit> flit_in;

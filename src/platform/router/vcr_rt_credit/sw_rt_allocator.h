@@ -21,11 +21,20 @@
 
 #include "../vcr_rt_credit/support_modules/sa_stage1_rt.h"
 #include "../vcr_rt_credit/support_modules/sa_stage2_rt.h"
+#include "../../MemoryProfiled.h"
 
 using namespace std;
 
 template<int N_VCs>
-SC_MODULE (SWRTAllocator) {
+#ifdef MEM_PROF
+class SWRTAllocator: public sc_module, MemoryProfiled<SWRTAllocator<N_VCs> > {
+#else
+class SWRTAllocator: public sc_module {
+#endif
+
+public:
+//template<int N_VCs>
+//SC_MODULE (SWRTAllocator) {
 	sc_in<int> in_vc_state_reg[N_ROUTER_PORTS][N_VCs];
 	sc_in<int> out_port_req_reg[N_ROUTER_PORTS][N_VCs];
 	sc_in<bool> tail_reg[N_ROUTER_PORTS][N_VCs];
@@ -81,9 +90,9 @@ SC_MODULE (SWRTAllocator) {
 		}
 
 		// arbiters at stage1
-		string arbiter_stage1_name;
+		string arbiter_stage1_name = "";
 		for (int pi = 0; pi < N_ROUTER_PORTS; pi++) {
-			arbiter_stage1_name = "SW_Arbiter_Stage1[" + int_to_str(pi) + "]";
+			//arbiter_stage1_name = "SW_Arbiter_Stage1[" + int_to_str(pi) + "]";
 			arbiter_stage1[pi] = new SAStage1RT<N_VCs>(
 					arbiter_stage1_name.data());
 
@@ -98,9 +107,9 @@ SC_MODULE (SWRTAllocator) {
 		}
 
 		// arbiters at stage2
-		string arbiter_stage2_name;
+		string arbiter_stage2_name = "";
 		for (int po = 0; po < N_ROUTER_PORTS; po++) {
-			arbiter_stage2_name = "SW_Arbiter_Stage2[" + int_to_str(po) + "]";
+			//arbiter_stage2_name = "SW_Arbiter_Stage2[" + int_to_str(po) + "]";
 			arbiter_stage2[po] = new SAStage2RT<N_VCs>(
 					arbiter_stage2_name.data());
 

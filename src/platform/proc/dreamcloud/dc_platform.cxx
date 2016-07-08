@@ -12,62 +12,13 @@
 #include "commons/mapping_heuristic/dcMappingHeuristicZigZagThreeCore.hxx"
 #include "commons/mapping_heuristic/dcMappingHeuristicRandom.hxx"
 #include "commons/mapping_heuristic/uoyHeuristicModuleStatic.hxx"
+#include "commons/microworkload/MicroWorkloadGenerator.hxx"
 
 DCLabelsMapping DCParameters::labelsMap;
 
 DcPlatform::DcPlatform(sc_module_name name) :
 		sc_module(name), newRunnable_event("newRunEvent",
 				CommonParameter::dim_x) {
-
-//	unsigned long size = 0;
-//	unsigned long nbCores = CommonParameter::dim_x * CommonParameter::dim_y;
-
-//	cerr << " Size of DcPlatform = " << sizeof(DcPlatform) << endl;
-//	size = size + sizeof(DcPlatform);
-//
-//	cerr << " Size of DcProc = " << sizeof(DcProc) << endl;
-//	size = size + sizeof(DcProc) * nbCores;
-//
-//	cerr << " Size of tile = " << sizeof(Tile) << endl;
-//	size = size + sizeof(Tile) * nbCores;
-//
-//	cerr << " Size of vc_router = " << sizeof(VCRouter<8>) << endl;
-//	size = size + sizeof(VCRouter<8>) * nbCores;
-//
-//	cerr << " Size of vc_buffer = " << sizeof(VCBuffer) << endl;
-//	size = size + sizeof(VCBuffer) * nbCores * N_ROUTER_PORTS * RouterParameter::n_VCs;
-//
-//	cerr << " Size of vc_crossbar = " << sizeof(VCCrossbar<8>) << endl;
-//	size = size + sizeof(VCCrossbar<8>)  * nbCores;
-//
-//	cerr << " Size of vc_allocator = " << sizeof(VCAllocator<8>) << endl;
-//	size = size + sizeof(VCAllocator<8>) * nbCores;
-//
-//	cerr << " Size of sw_allocator = " << sizeof(SWAllocator<8>) << endl;
-//	size = size + sizeof(SWAllocator<8>) * nbCores;
-//
-//	cerr << " Size of route_comp = " << sizeof(RouteCompVc) << endl;
-//	size = size + sizeof(RouteCompVc) * nbCores;
-//
-//	cerr << " Size of in state update = " << sizeof(InVCStateUpdate) << endl;
-//	size = size + sizeof(InVCStateUpdate) * nbCores * N_ROUTER_PORTS * RouterParameter::n_VCs;
-//
-//	cerr << " Size of out state update = " << sizeof(OutVCStateUpdate<8>) << endl;
-//	size = size + sizeof(OutVCStateUpdate<8>) * nbCores * N_ROUTER_PORTS * RouterParameter::n_VCs;
-//
-//	cerr << " Size of sa stage 1 = " << sizeof(SAStage1_rt<8>) << endl;
-//	size = size + sizeof(SAStage1_rt<8>) * nbCores * N_ROUTER_PORTS * RouterParameter::n_VCs;
-//
-//	cerr << " Size of sa stage 2 = " << sizeof(SAStage2_rt<8>) << endl;
-//	size = size + sizeof(SAStage2_rt<8>) * nbCores * N_ROUTER_PORTS * RouterParameter::n_VCs;
-//
-//	cerr << " Size of vca stage 1 = " << sizeof(VCAStage1OutputVCChooserRT<8>) << endl;
-//	size = size + sizeof(VCAStage1OutputVCChooserRT<8>) * nbCores * N_ROUTER_PORTS * RouterParameter::n_VCs;
-//
-//	cerr << " Size of vca stage 2 = " << sizeof(VCAStage2OutputVCArbitrer<8>) << endl;
-//	size = size + sizeof(VCAStage2OutputVCArbitrer<8>) * nbCores * N_ROUTER_PORTS * RouterParameter::n_VCs;
-//
-//	cerr << "TOTAL size = " << size /1024.0 / 1024.0 << " MBytes" << endl;
 
 	// Inits output files
 	nocTrafficCsvFile.open(
@@ -136,9 +87,21 @@ DcPlatform::DcPlatform(sc_module_name name) :
 		application = new dcApplication();
 		application->CreateGraphEntities(taskGraph, amApplication,
 				DCParameters::seqDep);
+
+		// Use the application or generate a micro workload for it
+		if (DCParameters::useMicroworkload) {
+			dcMwGenerator gen;
+			vector<dcTaskGraph*> workloads = gen.MwGenerate(taskGraph,
+					amApplication, DCParameters::microworkloadWidth, DCParameters::microworkloadHeight, 2);
+			for (std::vector<dcTaskGraph*>::iterator it = workloads.begin();
+					it != workloads.end(); ++it) {
+				taskGraph = *it;
+			}
+		}
 		tasks = application->GetAllTasks(taskGraph);
 		labels = application->GetAllLabels(amApplication);
 		runnables = application->GetAllRunnables(taskGraph);
+
 		int t1 = time(NULL);
 		application->GetAllPriorities(taskGraph);
 		application->dumpRunnablesToFiles(taskGraph, DCParameters::outputFolder);

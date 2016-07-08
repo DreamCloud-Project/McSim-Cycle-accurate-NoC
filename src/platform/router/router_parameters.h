@@ -21,7 +21,7 @@
 #define ROUTER_BUFFERLESS_ADAPTIVE 9 // bufferless router using an adaptive routing policy
 #define ROUTER_VC_RT 10			// virtual channel with RT support
 
-#define MAX_N_VCS 9		// maximum number of virtual channel - MUST be NUM_VCS + 1
+#define MAX_N_VCS 9		// maximum number of virtual channel
 #define MAX_N_VCs MAX_N_VCS
 #define NUM_VCS 8			// < MAX_N_VCS
 

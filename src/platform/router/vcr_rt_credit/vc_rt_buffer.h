@@ -20,11 +20,21 @@
 //#include "parameters.h"
 #include "../../definition.h"
 #include "../router_parameters.h"
+#include "../../MemoryProfiled.h"
 
 using namespace std;
 
-SC_MODULE(VCRTBuffer){
+#ifdef MEM_PROF
+class VCRTBuffer : public sc_module, MemoryProfiled<VCRTBuffer> {
+#else
+class VCRTBuffer : public sc_module {
+#endif
 
+private:
+	// process
+	void buffer_process();	// write
+
+public:
 	// reset and clock
 	sc_in <bool> clk;
 	sc_in <bool> reset;
@@ -42,16 +52,12 @@ SC_MODULE(VCRTBuffer){
 	int port_id; // the input port id
 	int vc_id; // the VC id in the input port
 
-	// process
-	void buffer_process();	// write
-
-	SC_CTOR(VCRTBuffer){
+	SC_HAS_PROCESS(VCRTBuffer);
+	VCRTBuffer(sc_module_name name_) : sc_module(name_) {
 		SC_METHOD(buffer_process);
 		sensitive << reset.pos() << clk.pos();
-
 	}
 
-public:
 	// set buffer_size, buffer_reserve
 	void initilize(unsigned int _buffer_size);
 
