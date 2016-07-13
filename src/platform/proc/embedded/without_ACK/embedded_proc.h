@@ -39,8 +39,8 @@ public:
 	ProcEvaluationFactors *evaluation();
 
 	// keep trace of number of idle entries of each output VC
-	sc_signal <int> out_vc_remain[MAX_N_VCs];
-	sc_signal <int> out_vc_remain_reg[MAX_N_VCs];
+	sc_signal <int> out_vc_remain[MAX_N_VCS];
+	sc_signal <int> out_vc_remain_reg[MAX_N_VCS];
 
 	sc_signal <bool> queue_out_valid;	// queue output before sent to LOCAL port
 	sc_signal <Flit> queue_out;
@@ -90,8 +90,8 @@ public:
 
 private:
 
-	sc_signal <bool> count_plus[MAX_N_VCs];
-	sc_signal <bool> count_minus[MAX_N_VCs];
+	sc_signal <bool> count_plus[MAX_N_VCS];
+	sc_signal <bool> count_minus[MAX_N_VCS];
 
 	// destination info
 	int n_dsts;	// number of destinations <= MAX_N_DESTS

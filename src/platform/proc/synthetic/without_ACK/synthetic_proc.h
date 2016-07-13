@@ -107,11 +107,11 @@ class SyntheticProc: public VirtualProc{
 	sc_signal <bool> queue_out_valid;	// queue output before sent to LOCAL port
 	sc_signal <Flit> queue_out;
 
-	sc_signal <int> out_vc_remain[MAX_N_VCs];		// keep trace of number of idle entries of each output VC
-	sc_signal <int> out_vc_remain_reg[MAX_N_VCs];
+	sc_signal <int> out_vc_remain[MAX_N_VCS];		// keep trace of number of idle entries of each output VC
+	sc_signal <int> out_vc_remain_reg[MAX_N_VCS];
 
-	sc_signal <bool> count_plus[MAX_N_VCs];	// = out_vc_buffer_rd
-	sc_signal <bool> count_minus[MAX_N_VCs];
+	sc_signal <bool> count_plus[MAX_N_VCS];	// = out_vc_buffer_rd
+	sc_signal <bool> count_minus[MAX_N_VCS];
 
 	// packet inter-injection time (cycles) with exponential distribution
 //	int inter_injection_time(double flit_rate, int type);

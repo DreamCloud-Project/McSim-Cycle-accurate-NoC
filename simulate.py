@@ -15,6 +15,9 @@ DEFAULT_ROWS = 4
 DEFAULT_COLS = 4
 DEFAULT_FREQ = 1000000000
 
+VCS = [1, 2, 4, 8, 16]
+BUFFER_SIZES = [1, 2, 4, 8, 16]
+
 FREQ_UNITS = {
  'GHz' : 1000000000,
  'MHz' : 1000000,
@@ -74,6 +77,7 @@ def main():
     parser = argparse.ArgumentParser(description='Cycle accurate simulator runner script')
     parser.add_argument('-d', '--syntax_dependency', action='store_true', help='consider successive runnables in tasks call graph as dependent')
     appGroup = parser.add_mutually_exclusive_group()
+    parser.add_argument('-bs', '--buffer_size', type=int, help='specify the number of slots in buffers (default is 16)', choices=BUFFER_SIZES)
     appGroup.add_argument('-da', '--def_application', help='specify the application to be simulated among the default ones', choices=['DC'])
     appGroup.add_argument('-ca', '--custom_application', help='specify a custom application file to be simulated')
     parser.add_argument('-f', '--freq', help='specify the frequency of cores in the NoC. Supported frequency units are Hz, KHz, MHz and GHz e.g 400MHz or 1GHz', action=ValidateFreq)
@@ -83,6 +87,7 @@ def main():
     parser.add_argument('-mww', '--micro_workload_width', type=int, help='the width of the simulated micro workload. To be used with -mw only')
     parser.add_argument('-mwh', '--micro_workload_height', type=int, help='the height of the simulated micro workload. To be used with -mw only')
     parser.add_argument('-np', '--no_periodicity', action='store_true', help='run periodic runnables only once')
+    parser.add_argument('-nvc', '--nb_virtual_channels', type=int, help='specify the number of virtual channels (default is 8)', choices=VCS)
     parser.add_argument('-o', '--output_folder', help='specify the absolute path of the output folder where simulation results will be generated')
     parser.add_argument('-r', '--random', action='store_true', help='replace constant seed used to generate distributions by a random one based on current time')
     parser.add_argument('-s', '--scheduling_strategy', help='specify the scheduling strategy used by cores to choose the runnable to execute', choices=['prio'])
@@ -150,6 +155,12 @@ def main():
          cmd.append('-d')
     if args.no_periodicity:
          cmd.append('-np')
+    if args.nb_virtual_channels:
+         cmd.append('-nvc')
+         cmd.append(str(args.nb_virtual_channels))
+    if args.buffer_size:
+         cmd.append('-bsize')
+         cmd.append(str(args.buffer_size))
     if args.micro_workload:
          cmd.append('-mw')
          if args.micro_workload_width:

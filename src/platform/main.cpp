@@ -61,14 +61,13 @@ double RouterParameter::link_length = 1000; // 1000 um
 
 int RouterParameter::router_type = ROUTER_VC_RT;
 
-int RouterParameter::n_VCs = NUM_VCS;
+int RouterParameter::n_VCs = DEFAULT_N_VCS;
 
 int RouterParameter::n_SBs = NUM_SBs;
 
 int RouterParameter::data_link_width = DATA_LINK_WIDTH;
 
-unsigned int RouterParameter::buffer_size = BUFFER_SIZE;
-//unsigned int RouterParameter::buffer_size = 4;
+unsigned int RouterParameter::buffer_size = DEFAULT_BUFFER_SIZE;
 
 unsigned int RouterParameter::shared_buffer_size = SHARED_BUFFER_SIZE;
 int RouterParameter::buffer_reserve = BUFFER_RESERVE;
@@ -650,7 +649,7 @@ int sc_main(int argc, char *argv[]) {
 		break;
 	default:
 		cout << "ERROR: buffer size is not supported!" << endl;
-		exit(0);
+		exit(-1);
 	}
 
 	if (RouterParameter::routing_type == ROUTING_XY) {

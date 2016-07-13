@@ -35,13 +35,13 @@ class VirtualRouter: public sc_module{
 	sc_in <bool> valid_in[ROUTER_PORTS];
 	sc_in <Flit> flit_in[ROUTER_PORTS];
 //	sc_out <bool> in_full[ROUTER_PORTS][MAX_N_VCs];
-	sc_out <bool> in_vc_buffer_rd[ROUTER_PORTS][MAX_N_VCs];	// this VC buffer was read?
+	sc_out <bool> in_vc_buffer_rd[ROUTER_PORTS][MAX_N_VCS];	// this VC buffer was read?
 
 	// output ports
 	sc_out <bool> valid_out[ROUTER_PORTS];
 	sc_out <Flit> flit_out[ROUTER_PORTS];
 //	sc_in <bool> out_full[ROUTER_PORTS][MAX_N_VCs];
-	sc_in <bool> out_vc_buffer_rd[ROUTER_PORTS][MAX_N_VCs];	// VC buffer of downstream router was read?
+	sc_in <bool> out_vc_buffer_rd[ROUTER_PORTS][MAX_N_VCS];	// VC buffer of downstream router was read?
 
 	// functions
 	// initialize all constants inside the router, such as router location

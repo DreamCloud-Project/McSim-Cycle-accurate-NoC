@@ -316,7 +316,7 @@ DcPlatform::DcPlatform(sc_module_name name) :
  */
 void DcPlatform::dependentRunnablesReleaser_method() {
 
-	// Copy all completed runnables from PEs into dcSystem and erase them in PE_XY
+	// Copy all completed runnables from PEs into dcSystem
 	vector<dcRunnableInstance *> completedRunInstances;
 	for (int x = 0; x < CommonParameter::dim_x; x++) {
 		for (int y = 0; y < CommonParameter::dim_y; y++) {
@@ -325,6 +325,14 @@ void DcPlatform::dependentRunnablesReleaser_method() {
 					proc->completedRunnableInstances.begin();
 					i != proc->completedRunnableInstances.end(); ++i) {
 				completedRunInstances.push_back(*i);
+#ifdef DEBUG
+				cerr << "time " << sc_time_stamp() << ": "
+						<< (*i)->GetUniqueID()
+						<< " completed: completed = "
+						<< nbRunnablesCompleted + 1
+						<< " VS mapped = " << nbRunnablesMapped
+						<< endl;
+#endif
 				nbRunnablesCompleted++;
 			}
 		}

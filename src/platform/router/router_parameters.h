@@ -21,9 +21,8 @@
 #define ROUTER_BUFFERLESS_ADAPTIVE 9 // bufferless router using an adaptive routing policy
 #define ROUTER_VC_RT 10			// virtual channel with RT support
 
-#define MAX_N_VCS 9		// maximum number of virtual channel
-#define MAX_N_VCs MAX_N_VCS
-#define NUM_VCS 8			// < MAX_N_VCS
+#define MAX_N_VCS 16		// maximum number of virtual channel
+#define DEFAULT_N_VCS 8			// < MAX_N_VCS
 
 #define NUM_SBs	5		// num of shared buffers
 
@@ -31,7 +30,7 @@
 #define FLIT_WIDTH 34		// 2-bit H+T + interconnect bits
 
 //#define COUNTER_SIZE 4		// 4-bit (3+1) counter for 8-entry FIFO
-#define BUFFER_SIZE 16
+#define DEFAULT_BUFFER_SIZE 16
 #define BUFFER_RESERVE 3	// reserved space for avoiding buffer full due to router pipelining
 #define VC_BUFFER_RESERVE 3	// reserved space for a virtual-channel buffer with output link pipelining
 

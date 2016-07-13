@@ -8,6 +8,9 @@
 #ifndef DC_PARAMETERS_H_
 #define DC_PARAMETERS_H_
 
+#define DEBUG 1
+#undef DEBUG
+
 #include <map>
 #include "commons/mapping_heuristic/dcMappingHeuristicI.hxx"
 

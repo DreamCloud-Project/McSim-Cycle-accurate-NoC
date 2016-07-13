@@ -21,23 +21,28 @@
 
 class VirtualProc: public sc_module{
   public:
+
 	// clk and reset
 	sc_in <bool> clk;
 	sc_in <bool> reset;
 
-	// Input interface
+	// Signal from the router saying that he received a flit for this proc
 	sc_in <bool> valid_in;
+
+	// Signal from the router with the flit to be received by this proc
 	sc_in <Flit> flit_in;
 
-	// Signal from virtual channels of the local router port saying that one buffer entry is available
+	// Signal from virtual channels of the router saying that one buffer entry is available
 	sc_in <bool> out_vc_buffer_rd[MAX_N_VCS];
 
-	// output interface
+	// Signal to router saying that this proc want to send a flit
 	sc_out <bool> valid_out;
+
+	// Signal to router with the flit to be sent by this proc
 	sc_out <Flit> flit_out;
 
+	// Signal to router saying saying that this proc has read an input flit on the given VC (the router can free it)
 	sc_out <bool> in_vc_buffer_rd[MAX_N_VCS];
-
 
 	// initialize all constants inside the processor (x,y)
 	virtual void initialize(int x, int y)=0;

@@ -15,6 +15,7 @@ def main():
     parser_cp = subparsers.add_parser('build')
     parser_cp.add_argument('-nc',  '--noClean', action='store_true', help='don\'t clean before compiling')
     parser_cp.add_argument('-j',  '--jobs', type=int, help='perform parallel compilation using the specified number of threads')
+    parser_cp.add_argument('-d', '--debug', action='store_true', help='build with debug symbols')
     parser_cl = subparsers.add_parser('clean')
     args = parser.parse_args()
 
@@ -30,6 +31,10 @@ def main():
     if args.command == 'build':
         print ('Running cmake')
         cmd = ['cmake', '..']
+        if args.debug:
+            cmd.append('-DCMAKE_BUILD_TYPE=Debug')
+        else:
+            cmd.append('-DCMAKE_BUILD_TYPE=Release')
         if not args.verbose:
             cmake = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=work_dir)
         else:

@@ -7,7 +7,7 @@
 #include "../proc_functions.h"
 
 // Number of bytes in a packet (considering a given flit size in bits,
-// this also define the number of flits)
+// this also defines the number of flits)
 #define PACKET_SIZE_IN_BYTES 32
 
 // Flit size in bits
@@ -121,13 +121,6 @@ void DcProc::executeRemoteLabelRead(dcRemoteAccessInstruction *rinst,
 		source_queue.push(*(packet.flit[i])); // push value of flit to queue, not pointer
 	}
 
-	nbRunBlocked++;
-	if (run->getRunCall()->GetRunClassName() == "runnable00264") {
-		cerr << run->GetUniqueID() << " blocked at time " << sc_time_stamp()
-				<< " with total blocked =  " << nbRunBlocked << " on PE"
-				<< local_x << local_y << endl;
-	}
-
 	// Put the runnable in the blocked list
 	// and remove it from the ready list
 	runnableBlockedOnRemoteRead blockedOnRemoteRead;
@@ -143,6 +136,15 @@ void DcProc::executeRemoteLabelRead(dcRemoteAccessInstruction *rinst,
 	blockedOnRemoteRead.yReplier = y;
 	addBlockedRunnable(blockedOnRemoteRead);
 	removeReadyRunnable(run);
+
+	nbRunBlocked++;
+#ifdef DEBUG
+	cerr << "time " << sc_time_stamp() << ": " << run->GetUniqueID()
+	<< " blocked: blocked =  " << nbRunBlocked << " on PE" << local_x
+	<< local_y << ": first blocked is "
+	<< runnablesBlockedOnRemoteRead.front().execElem.runInstance->GetUniqueID()
+	<< endl;
+#endif
 
 	// Sending a packet has a cost of 32 cycles for now:
 	// 1 clock cycle for each flit of the packet
@@ -225,14 +227,6 @@ void DcProc::flitIn_method() {
  */
 void DcProc::flitOut_method() {
 
-//	// If we sent a flit to the local router on the previous cycle:
-//	// we decrement the number of remaining entry in the buffer of VC 0
-//	// and we remove the flit from the local queue
-//	if (out_vc_remain[0] >= 1 && (source_queue.size() > 0)) {// if local port of router is not full
-//		out_vc_remain[0]--;
-//		source_queue.pop();
-//	}
-
 	// Send a flit if something to send AND room in VC channel
 	int sentVc = -1;
 	if (source_queue.size() > 0) {
@@ -240,25 +234,27 @@ void DcProc::flitOut_method() {
 		Flit f = source_queue.front();
 
 		// Virtual channel selection based on priority:
-		unsigned int i;
-		for (i = 0; i < priorities.size(); i++) {
-			if (f.priority == priorities[i]) {
+		unsigned int normalizedPrio;
+		for (normalizedPrio = 1; normalizedPrio <= priorities.size();
+				normalizedPrio++) {
+			if (f.priority == priorities[normalizedPrio]) {
 				break;
 			}
 		}
-		if (i >= priorities.size()) {
+		if (normalizedPrio > priorities.size()) {
 			cerr << "priority not found in list of priorities" << endl;
 			exit(-1);
 		}
 		double ratio = ((double) priorities.size()) / RouterParameter::n_VCs;
 		if (ratio <= 1) {
-			f.vc_id = i;
+			f.vc_id = normalizedPrio;
 		} else {
-			f.vc_id = (int) (ceil(i / ratio)) - 1;
+			f.vc_id = (int) (ceil(normalizedPrio / ratio)) - 1;
 		}
-		if (f.vc_id >= RouterParameter::n_VCs) {
-			cerr << "error in computing VC: prio = " << f.priority << ", i = "
-					<< i << " ratio = " << ratio << ", n_VCs = "
+		if (f.vc_id >= RouterParameter::n_VCs || f.vc_id < 0) {
+			cerr << "error in computing VC: prio = " << f.priority << " among "
+					<< priorities.size() << " priorities, normalized prio = "
+					<< normalizedPrio << ", ratio = " << ratio << ", n_VCs = "
 					<< RouterParameter::n_VCs << ", vc = " << f.vc_id << endl;
 			exit(-1);
 		}
@@ -268,17 +264,11 @@ void DcProc::flitOut_method() {
 			if (f.head) {
 				injected_packet_count++;
 			}
-			//out_vc_remain[0]--;
 			count_minus[f.vc_id].write(true);
 			valid_out.write(true);
 			flit_out.write(f);
 			source_queue.pop();
 			sentVc = f.vc_id;
-		}
-
-		// Local router full
-		else {
-			//cerr << local_x << local_y << " is full !!" << endl;
 		}
 	}
 
@@ -289,9 +279,9 @@ void DcProc::flitOut_method() {
 	}
 
 	// Update count minus
-	for (int v = 0; v < RouterParameter::n_VCs; v++) {
-		if (v != sentVc) {
-			count_minus[sentVc].write(false);
+	for (int vc = 0; vc < RouterParameter::n_VCs; vc++) {
+		if (vc != sentVc) {
+			count_minus[vc].write(false);
 		}
 	}
 }
@@ -300,21 +290,6 @@ void DcProc::initialize(int x, int y) {
 	local_x = x;
 	local_y = y;
 }
-
-///*
-// *  Method used to implement credit mechanism to know how
-// *  many buffers are available on local router to send flits.
-// *  sensitive to all the entries in out_vc_buffer_rd array (1 for each VC)
-// */
-//void DcProc::locRouterBuffers_method() {
-//	for (int v = 0; v < RouterParameter::n_VCs; v++) {
-//		if (out_vc_buffer_rd[v].read()) {
-//			cerr << "router " << local_x << local_y
-//					<< " made one buffer available on VC " << v << endl;
-//			out_vc_remain[v]++;
-//		}
-//	}
-//}
 
 void DcProc::receivePkt(const Packet & p) {
 
@@ -341,7 +316,7 @@ void DcProc::receivePkt(const Packet & p) {
 	*nocTrafficCsvFile << "NA";
 	*nocTrafficCsvFile << endl;
 
-	// We receive a read from a remote PE
+	// We receive a read request from a remote PE
 	// we must send back the response
 	if (head->readRequestId != -1 && !head->readResponse) {
 		unsigned long int nowInNano = sc_time_stamp().value() * 1E-3;
@@ -392,12 +367,14 @@ void DcProc::receivePkt(const Packet & p) {
 		(it->nbPktReceived)++;
 		if (it->nbPktReceived == it->nbPktToBeReceived) {
 			addReadyRunnable(it->execElem);
-			if (it->execElem.runInstance->getRunCall()->GetRunClassName()
-					== "runnable00264") {
-				cerr << it->execElem.runInstance->GetUniqueID()
-						<< " unblocked at time " << sc_time_stamp()
-						<< " with total blocked =  " << nbRunBlocked << endl;
-			}
+			//if (it->execElem.runInstance->getRunCall()->GetRunClassName()
+			//		== "runnable00264") {
+#ifdef DEBUG
+			cerr << "time " << sc_time_stamp() << ": "
+			<< it->execElem.runInstance->GetUniqueID()
+			<< " unblocked: blocked =  " << nbRunBlocked << endl;
+#endif
+			//}
 			runnablesBlockedOnRemoteRead.erase(it);
 			newRunnable_event->notify();
 			nbRunBlocked--;
@@ -592,13 +569,17 @@ void DcProc::runnableExecuter_thread() {
 /*
  * update out_vc_remain of all VCs
  */
-void DcProc::out_vc_remain_process() {
+void DcProc::out_vc_remain_method() {
 	for (int vo = 0; vo < RouterParameter::n_VCs; vo++) {
 		int tmp = out_vc_remain_reg[vo];
 		if (count_minus[vo].read())
 			tmp -= 1;
 		if (count_plus[vo].read())
 			tmp += 1;
+		if (tmp < 0) {
+			cerr << "Error out_vc_remain[" << vo << "] is negative" << endl;
+			exit(-1);
+		}
 		out_vc_remain[vo] = tmp;
 	}
 }

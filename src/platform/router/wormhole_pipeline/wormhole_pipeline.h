@@ -359,7 +359,7 @@ class WormholePipeline: public VirtualRouter{
 	// simulation of pipelining by adding pipeline registers at output links
 	sc_signal <bool> valid_out_pp[N_ROUTER_PORTS][MAX_N_PIPELINE_STAGES];
 	sc_signal <Flit> flit_out_pp[N_ROUTER_PORTS][MAX_N_PIPELINE_STAGES];
-	sc_signal <bool> in_vc_buffer_rd_pp[N_ROUTER_PORTS][MAX_N_VCs][MAX_N_PIPELINE_STAGES];	// maximum of only one pipeline on the credit back
+	sc_signal <bool> in_vc_buffer_rd_pp[N_ROUTER_PORTS][MAX_N_VCS][MAX_N_PIPELINE_STAGES];	// maximum of only one pipeline on the credit back
 };
 
 #endif /* WORMHOLE_PIPELINE_H_ */

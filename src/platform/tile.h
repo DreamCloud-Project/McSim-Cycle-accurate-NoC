@@ -184,8 +184,14 @@ SC_MODULE (Tile) {
 			case (8):
 				router = new VCRTRouter<8>(name.c_str());
 				break;
+			case (16):
+				router = new VCRTRouter<16>(name.c_str());
+				break;
+			default:
+				cerr << "Unsupported number of virtual channels: "
+						<< RouterParameter::n_VCs << endl;
+				exit(-1);
 			}
-			break;
 		}
 		case (ROUTER_SB_1IB):
 			break;

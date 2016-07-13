@@ -40,6 +40,12 @@ public:
 	int deadlinesMissed = 0;
 	vector<dcRunnableInstance *> completedRunnableInstances;
 
+	// TO BE PRIVATE
+	int out_vc_remain[MAX_N_VCS];
+	// local address
+	int local_x;
+	int local_y;
+
 	// functions
 	void initialize(int x, int y);
 
@@ -86,13 +92,14 @@ public:
 		}
 
 		// update out_vc_remain
-		SC_METHOD(out_vc_remain_process);
+		SC_METHOD(out_vc_remain_method);
 		for (int vo = 0; vo < RouterParameter::n_VCs; vo++) {
 			sensitive << out_vc_remain_reg[vo];
 			sensitive << count_plus[vo];
 			//sensitive << out_vc_buffer_rd[vo];
 			sensitive << count_minus[vo];
 		}
+		dont_initialize();
 
 		// pipelined out_vc_remain
 		SC_METHOD(out_vc_remain_reg_process);
@@ -113,13 +120,9 @@ private:
 	void flitIn_method();
 	void runnableExecuter_thread();
 	void locRouterBuffers_method();
-	void out_vc_remain_process();	// update out_vc_remain
+	void out_vc_remain_method();	// update out_vc_remain
 	void count_plus_process();	// pipelined out_vc_remain
 	void out_vc_remain_reg_process();	// pipelined out_vc_remain
-
-	// local address
-	int local_x;
-	int local_y;
 
 	static int nbRunBlocked;
 	static int packetId;
@@ -130,13 +133,12 @@ private:
 	queue<Flit> source_queue;
 
 	// Keep trace of number of idle entries of each input VC of the local router
-	int out_vc_remain[MAX_N_VCs];
-	sc_signal<int> out_vc_remain_reg[MAX_N_VCs];
-	sc_signal<bool> count_plus[MAX_N_VCs];	// = out_vc_buffer_rd
-	sc_signal<bool> count_minus[MAX_N_VCs];
+	sc_signal<int> out_vc_remain_reg[MAX_N_VCS];
+	sc_signal<bool> count_plus[MAX_N_VCS];
+	sc_signal<bool> count_minus[MAX_N_VCS];
 
 	// Keep track of the last head flit received on each output VC of the local router
-	Flit lastHead[MAX_N_VCs];
+	Flit lastHead[MAX_N_VCS];
 
 	// Type definitions for managing runnables preemption
 	struct runnableExecElement {

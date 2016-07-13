@@ -30,6 +30,7 @@
 #include "../../MemoryProfiled.h"
 #include "../routing_algorithms.h"
 #include "../virtual_router.h"
+#include "../../proc/dreamcloud/dc_proc.h"
 
 #include "support_modules/in_vc_state_update_rt.h"
 #include "support_modules/out_vc_state_update_rt.h"
@@ -174,7 +175,7 @@ public:
 		for (int pi = 0; pi < N_ROUTER_PORTS; pi++) {	// all input ports
 			for (int vi = 0; vi < N_VCs; vi++) {	// all VCs of an input port
 				int indexi = pi * N_VCs + vi;
-				//in_vc_state_name = "in_VC_state[" + int_to_str(pi) + "][" + int_to_str(vi) + "]"; MANUTOREMOVE
+				in_vc_state_name = "in_VC_state[" + int_to_str(pi) + "][" + int_to_str(vi) + "]";
 				in_vc_state_update[pi][vi] = new InVCStateUpdateRT(
 						in_vc_state_name.data());
 				in_vc_state_update[pi][vi]->in_port = pi;
@@ -193,7 +194,7 @@ public:
 		for (int po = 0; po < N_ROUTER_PORTS; po++) {	// all output ports
 			for (int vo = 0; vo < N_VCs; vo++) {// all VCs of that output port
 				int indexo = po * N_VCs + vo;
-				//out_vc_state_name = "out_VC_state[" + int_to_str(po) + "]["+ int_to_str(vo) + "]";MANUTOREMOVE
+				out_vc_state_name = "out_VC_state[" + int_to_str(po) + "]["+ int_to_str(vo) + "]";
 				out_vc_state_update[po][vo] = new OutVCStateUpdateRT<N_VCs>(
 						out_vc_state_name.data());
 				out_vc_state_update[po][vo]->out_port = po;
@@ -218,7 +219,7 @@ public:
 		string vc_valid_name = "";
 		for (int pi = 0; pi < N_ROUTER_PORTS; pi++) {	// all input ports
 			for (int vi = 0; vi < N_VCs; vi++) {	// all VCs of an input port
-				// vc_valid_name = "VC_valid_in[" + int_to_str(pi) + "]["+ int_to_str(vi) + "]";MANUTOREMOVE
+				vc_valid_name = "VC_valid_in[" + int_to_str(pi) + "]["+ int_to_str(vi) + "]";
 				vc_valid_in_demux[pi][vi] = new VCValidInDemuxRT(
 						vc_valid_name.data());
 
@@ -233,7 +234,7 @@ public:
 		string vc_name = "";
 		for (int pi = 0; pi < N_ROUTER_PORTS; pi++) {
 			for (int vi = 0; vi < N_VCs; vi++) {	// all virtual channels
-				// vc_name = "port=" + int2direction(pi) + ",VC=" + int_to_str(vi); MANUTOREMOVE
+				vc_name = "port=" + int2direction(pi) + ",VC=" + int_to_str(vi);
 				buffer[pi][vi] = new VCRTBuffer(vc_name.data());
 				buffer[pi][vi]->initilize(RouterParameter::buffer_size);
 				buffer[pi][vi]->port_id = pi;
@@ -257,7 +258,7 @@ public:
 		string route_comp_name = "";
 		for (int pi = 0; pi < N_ROUTER_PORTS; pi++) {
 			for (int vi = 0; vi < N_VCs; vi++) {	// all virtual channels
-				//route_comp_name = "route_comp[" + int_to_str(pi) + "]["+ int_to_str(vi) + "]"; MANUTOREMOVE
+				route_comp_name = "route_comp[" + int_to_str(pi) + "]["+ int_to_str(vi) + "]";
 				route_comp[pi][vi] = new RouteCompVcRT(route_comp_name.data());
 				route_comp[pi][vi]->in_vc_state(in_vc_state[pi][vi]);
 				route_comp[pi][vi]->buffer_empty(buffer_empty[pi][vi]);

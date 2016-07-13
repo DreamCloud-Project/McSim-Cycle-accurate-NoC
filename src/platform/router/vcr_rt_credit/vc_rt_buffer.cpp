@@ -9,12 +9,54 @@
 
 #include <cassert>
 #include "vc_rt_buffer.h"
+#include "../../common_functions.h"
 
 void VCRTBuffer::initilize(unsigned int _buffer_size) {
 	buffer_size = _buffer_size;
+	max_buffer_size = 0;
 }
 
-void VCRTBuffer::buffer_process() {
+void VCRTBuffer::handleRead() {
+
+	// Checks this buffer is not empty
+	if (buffer.empty()) {
+		cerr << "ERROR: read from an EMPTY buffer: " << this->basename()
+				<< " of the router at "
+				<< this->get_parent_object()->get_parent_object()->basename()
+				<< endl;
+		exit(-1);
+	}
+
+	// Pop the flit on this buffer's output
+	buffer.pop();
+}
+
+void VCRTBuffer::handleWrite() {
+
+	// Checks the input flit is for this buffer
+	if (buffer_in.read().vc_id != this->vc_id) {
+		cerr << "ERROR: flit in wrong VC " << this->basename()
+				<< " of the router at "
+				<< this->get_parent_object()->get_parent_object()->basename()
+				<< endl;
+		exit(-1);
+	}
+
+	// Checks this buffer is not yet full
+	if (buffer.size() >= buffer_size) {
+		cerr << "Reading and writing ";
+		cerr << "ERROR: write to a FULL buffer in valid_in && rd_req case: "
+				<< this->basename() << " of the router at "
+				<< this->get_parent_object()->get_parent_object()->basename()
+				<< endl;
+		exit(-1);
+	}
+
+	// Push the input flit in this buffer
+	buffer.push(buffer_in.read());
+}
+
+void VCRTBuffer::buffer_method() {
 
 	if (reset.read()) {	// if reset
 		full.write(0);
@@ -23,91 +65,26 @@ void VCRTBuffer::buffer_process() {
 		while (!buffer.empty()) {
 			buffer.pop();
 		}
-
 		buffer_out.write(Flit());
 	} else {	// if positive clk edge
 
-		if (valid_in.read() && rd_req.read()) {
+		// Read
+		if (rd_req.read()) {
+			handleRead();
+		}
 
-			// read
-			if (buffer.empty()) {
-				cout << "ERROR: read from an EMPTY buffer: " << this->basename()
-						<< " of the router at "
-						<< this->get_parent_object()->get_parent_object()->basename()
-						<< endl;
-			}
-			assert(!buffer.empty());
-			buffer.pop();
+		// Write
+		if (valid_in.read()) {
+			handleWrite();
+		}
 
-			// write
-			// Checks
-			if (buffer.size() == buffer_size) {
-				cout
-						<< "ERROR: write to a FULL buffer in valid_in && rd_req case: "
-						<< this->basename() << " of the router at "
-						<< this->get_parent_object()->get_parent_object()->basename()
-						<< endl;
-				exit(-1);
-			}
-			if (buffer_in.read().vc_id != this->vc_id) {
-				cout << "ERROR: flit in wrong VC " << this->basename()
-						<< " of the router at "
-						<< this->get_parent_object()->get_parent_object()->basename()
-						<< endl;
-				exit(-1);
-			}
-			buffer.push(buffer_in.read());
-			empty.write(0);
+		// Outputs signals
+		empty.write(buffer.empty());
+		if (!buffer.empty()) {
 			buffer_out.write(buffer.front());
+		} else {
+			buffer_out.write(Flit());
 		}
-
-		else if (valid_in.read()) {
-
-			// TODO follow debug
-			if ((this->basename() == "port=L,VC=0")
-					&& (this->get_parent_object()->basename()
-							== "Virtual_Channel_RT_Router_8_VCs_Tile[0][1]")) {
-				cerr << "size = " << buffer.size() << endl;
-			}
-
-			// Checks
-			if (buffer_in.read().vc_id != this->vc_id) {
-				cout << "ERROR: flit in wrong VC " << this->basename() << " of "
-						<< this->get_parent_object()->basename() << endl;
-				exit(-1);
-			}
-			if (buffer.size() == buffer_size) {
-				cout
-						<< "ERROR: write to a FULL buffer in valid_in case at time "
-						<< sc_time_stamp() << ": " << this->basename() << " of "
-						<< this->get_parent_object()->basename() << endl;
-				exit(-1);
-			}
-
-			buffer.push(buffer_in.read());
-			empty.write(0);
-			buffer_out.write(buffer.front());
-		}
-
-		else if (rd_req.read()) {
-			if (buffer.empty()) {
-				cout << "ERROR: read from an EMPTY buffer: " << this->basename()
-						<< " of the router at "
-						<< this->get_parent_object()->get_parent_object()->basename()
-						<< endl;
-			}
-
-			assert(!buffer.empty());
-			buffer.pop();
-
-			// update flit_out and empty signals
-			empty.write(buffer.empty());
-			if (!buffer.empty())
-				buffer_out.write(buffer.front());
-			else
-				buffer_out.write(Flit());
-		}
-
 		full.write(buffer.size() == buffer_size);
 	}
 }
