@@ -33,9 +33,11 @@ void command_line_parser(int argc, char *argv[]) {
 					cout << "The clk frequency mode is invalid!" << endl;
 					exit(0);
 				}
-			} else if (!option.compare("-freq")) {
-				CommonParameter::input_clk_freq = atof(argv[++i]);
-			} else if (!option.compare("-router")) {
+			}
+			//else if (!option.compare("-freq")) {
+			// CommonParameter::input_clk_freq = atof(argv[++i]);
+			//}
+			else if (!option.compare("-router")) {
 				string router_type = argv[++i];
 				if (!router_type.compare("wormhole"))
 					RouterParameter::router_type = ROUTER_WORMHOLE;

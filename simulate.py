@@ -5,6 +5,7 @@ import os
 import sys
 import subprocess
 import collections
+import re
 
 DEFAULT_ITERATIONS = 1
 DEFAULT_APP = 'DC'
@@ -171,23 +172,17 @@ def main():
              cmd.append(str(args.micro_workload_height))
     if not args.random:
          cmd.extend(('-seed', "42"))
-    cmdStr = ''
-    for s in cmd:
-        cmdStr = cmdStr + ' ' + s
-    if not args.verbose:
-         sim = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=my_env)
-         stdout, stderr = sim.communicate()
-         outFile = open(out + '/' + 'OUTPUT_Execution_Report.log', 'w')
-         outFile.write(stdout)
-         outFile.close()
-    else:
+    if args.verbose:
+        cmdStr = ''
+        for s in cmd:
+            cmdStr = cmdStr + ' ' + s
         print (cmdStr)
-        sim = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=my_env)
-        stdout, stderr = sim.communicate()
-        outFile = open(out + '/' + 'OUTPUT_Execution_Report.log', 'w')
-        outFile.write(stdout)
-        outFile.close()
-        print stdout
+    sim = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=my_env)
+    stdout, stderr = sim.communicate()
+    outFile = open(out + '/' + 'OUTPUT_Execution_Report.log', 'w')
+    outFile.write(stdout)
+    outFile.close()
+    print stdout,
     if sim.returncode != 0:
         if not args.verbose:
             print stderr,

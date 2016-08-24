@@ -325,7 +325,7 @@ void DcPlatform::dependentRunnablesReleaser_method() {
 					proc->completedRunnableInstances.begin();
 					i != proc->completedRunnableInstances.end(); ++i) {
 				completedRunInstances.push_back(*i);
-#ifdef DEBUG
+#ifdef DEBUG_SIMU
 				cerr << "time " << sc_time_stamp() << ": "
 						<< (*i)->GetUniqueID()
 						<< " completed: completed = "
