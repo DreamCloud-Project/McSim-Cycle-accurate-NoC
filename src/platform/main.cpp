@@ -121,6 +121,7 @@ int SyntheticParameters::hotspot_percentage = HOTSPOT_PERCENTAGE;
 
 //---------- Dreamcloud default
 string DCParameters::mapping = "";
+int DCParameters::mappingSeed = 42;
 string DCParameters::mappingFile = "";
 string DCParameters::appXml = "";
 string DCParameters::modeFile = "";

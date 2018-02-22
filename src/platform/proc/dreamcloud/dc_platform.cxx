@@ -149,6 +149,8 @@ DcPlatform::DcPlatform(sc_module_name name) :
 			mappingHeuristic = staticMappingSM;
 		} else if (DCParameters::mapping == "ZigZag") {
 			mappingHeuristic = new dcMappingHeuristicZigZag();
+		} else if (DCParameters::mapping == "Random") {
+		  mappingHeuristic = new dcMappingHeuristicRandom(DCParameters::mappingSeed);
 		} else {
 			cerr << "mapping heuristic unknown" << endl;
 			exit(-1);

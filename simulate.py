@@ -43,7 +43,7 @@ class ValidateMapping(argparse.Action):
                  raise ValueError('{s!r} mapping requires a file option'.format(s=mapping))
             mappingFile = values[1]
         randomfixedSeed = None
-        if mapping == 'Weka':
+        if mapping == 'Random':
             if len(values) == 1:
                  raise ValueError('{s!r} mapping requires a seed option'.format(s=mapping))
             randomfixedSeed = values[1]

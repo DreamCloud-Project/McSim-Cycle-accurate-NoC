@@ -9,7 +9,7 @@
 #define DC_PARAMETERS_H_
 
 // Uncomment to have debug info
-#define DEBUG_SIMU 1
+//#define DEBUG_SIMU 1
 
 
 #include <map>
@@ -21,6 +21,7 @@ struct DCParameters{
 	static DCLabelsMapping labelsMap; // global table of labels mapping
 	static string mapping;
 	static string mappingFile;
+        static int mappingSeed;
 	static string appXml;
 	static string modeFile;
 	static string outputFolder;

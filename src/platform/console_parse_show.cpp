@@ -342,10 +342,13 @@ void command_line_parser(int argc, char *argv[]) {
 				else if (mapping == "KhalidDC" || mapping == "MinComm"
 						|| mapping == "Static" || mapping == "StaticSM"
 						|| mapping == "ZigZag" || mapping == "ZigZagSM"
-						|| mapping == "3Core") {
+						|| mapping == "3Core" || mapping == "Random") {
 					DCParameters::mapping = mapping;
-					if (!mapping.compare("Static")) {
-						DCParameters::mappingFile = argv[++i];
+					if (mapping == "Random") {
+					  DCParameters::mappingSeed = std::stoi(argv[++i]);
+					}
+					else if (!mapping.compare("Static")) {
+					  DCParameters::mappingFile = argv[++i];
 					}
 				} else {
 					cout << "ERROR: Task mapping algorithm is invalid!" << endl;
