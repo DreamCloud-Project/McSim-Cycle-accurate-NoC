@@ -1,3 +1,4 @@
 /ca-noc-simulator-debug/
 /ca-noc-simulator-release/
 OUTPUT_FILES
+obj
